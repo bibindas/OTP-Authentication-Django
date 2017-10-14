@@ -22,7 +22,7 @@ def otp_generator(user,size=6, chars=string.digits):
         otp = ''.join(random.choice(chars) for _ in range(size))
     return otp
 
-
+                    
 class Signup(APIView):
     # API for registering user
     def post(self, request):
@@ -33,16 +33,23 @@ class Signup(APIView):
         gender = request.data.get("gender")
         if not first_name or not last_name or not email or not gender or not phone_number:
             return Response(
-                {'status':"Failed"},
-                status=status.HTTP_400_BAD_REQUEST)
+                {'status':"Failed",
+                'message':"Bad parameters"},
+                status=status.HTTP_200_OK)
+        if AppUser.objects.filter(email=email).exists():
+            return Response(
+                {'status':"Failed",
+                "messages": "Already registered"},
+                status=status.HTTP_200_OK)  
         user= AppUser.objects.create_user(
                     first_name=first_name,
                     last_name=last_name,
                     email=email,
                     gender=gender,
-                    phone_number=phone_number)
+                    phone_number=phone_number)           
         return Response(
-                {'status':"success"},
+                {'status':"success",
+                "messages":"Registered"},
                 status=status.HTTP_201_CREATED)             
 
 
@@ -74,7 +81,8 @@ class Login(APIView):
             email = EmailMessage("OTP",otp, to=[email])
             email.send()
         return Response(
-            {'status':'success'},
+            {'status':'success',
+            'messages':'OTP sent'},
             status=status.HTTP_201_CREATED)
 
 
@@ -87,3 +95,38 @@ class Logout(APIView):
         return Response(
             {'status':'OK'},
             status=status.HTTP_200_OK)            
+
+
+class OtpVerification(APIView):
+    def post(self,request):
+        type_ = request.data.get("type_")
+        email = request.data.get("email")
+        phone_number = request.data.get("phone_number")
+        otp = request.data.get("otp")
+        if not otp:
+            return Response({
+                'status':"failed",
+                'message':"OTP required"
+                },status=status.HTTP_400_BAD_REQUEST)  
+        if type_ == 'email':
+            try:
+                user_session = UserSession.objects.get(user__email=email,otp=otp)
+                return Response({'status':'OK',
+                    'token':user_session.token
+                    },status=status.HTTP_200_OK)
+            except:
+                return Response({
+                    'status':'failed',
+                    'message':'Invalid OTP'
+                    },status=status.HTTP_400_BAD_REQUEST)
+        if type_ == 'phonenumber':
+            try:
+                user_session = UserSession.objects.get(user__phone_number=phone_number,otp=otp)
+                return Response({'status':'OK',
+                    'token':user_session.token
+                    },status=status.HTTP_200_OK)
+            except:
+                return Response({
+                    'status':'failed',
+                    'message':'Invalid OTP'
+                    },status=status.HTTP_400_BAD_REQUEST)        

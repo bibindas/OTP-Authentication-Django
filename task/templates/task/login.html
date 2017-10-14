@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+<h1>Login</h1>
+
+<body>
+ Send OTP to my:<br>
+  <input type="radio" id="typeemail" name="type"  value="email"> Email<br>
+  <input type="email" placeholder="Enter email here" id="email" name="email"><br>
+  <input type="radio" id="typephone" name="type" value="phonenumber"> Phone number<br>
+  <input type="text" placeholder="Enter phone number here" id="phone_number" name="phone_number"><br><br>
+  <input type="text" id="otp" placeholder="Enter the OTP here" name="password"><br>
+
+<input type="button" id="submit" value="Receive OTP" onclick="login()">
+
+  <script type="text/javascript">
+  $(document).ready(function () {
+    $("#otp").hide();
+    $("#email").hide();
+    $("#phone_number").hide();
+    $("#typeemail").click(function () {
+    	$("#phone_number").hide();
+        $("#email").show();
+    });
+    $("#typephone").click(function () {
+    	$("#email").hide();
+        $("#phone_number").show();
+    });
+});
+  function login(){
+  	type_ = $('input[name=type]:checked').val();
+   	email = $('#email').val();
+  	phone_number = $('#phone_number').val();
+
+  	console.log(type_)
+  	 $.ajax({
+          type: "POST",
+          url: "/api/login/",
+          data: {
+          		type_:type_,
+          		email:email,
+          		phone_number:phone_number,
+          			},
+          success: function(res){
+          	console.log(res)
+              if (res.status=="success"){
+                  alert(res.messages) 
+                  $("#otp").show()
+                  $("input[type=radio]").attr('disabled', true);
+                  $("#email").attr('disabled', true);
+                  $("#phone_number").attr('disabled', true);
+                  $("#submit").prop('value', 'Submit');
+                  $("#submit").attr('onclick', 'verify()');
+              }
+              else{
+                  alert(res.messages);
+              }
+          },
+          error:function(res){
+              alert("error");
+          }
+        });
+
+  }
+   function verify(){
+  	type_ = $('input[name=type]:checked').val();
+   	email = $('#email').val();
+  	phone_number = $('#phone_number').val();
+  	otp = $('#otp').val();
+  	console.log(type_)
+  	 $.ajax({
+          type: "POST",
+          url: "/api/verify/",
+          data: {
+          		type_:type_,
+          		email:email,
+          		phone_number:phone_number,
+          		otp:otp
+          			},
+          success: function(res){
+          	console.log(res)
+              if (res.status=="success"){
+                  alert(res.messages) 
+              }
+              else{
+                  alert(res.messages);
+              }
+          },
+          error:function(res){
+              alert("error");
+          }
+        });
+
+  }
+  </script>
+  <a href="signup/">Signup</a><br>
+</body>
+</html>

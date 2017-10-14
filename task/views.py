@@ -9,3 +9,8 @@ from .models import City,Country,Countrylanguage,AppUser
 from django.urls import reverse
 from django.db import connection
 
+def login(request):
+	return render(request,'task/login.html')
+
+def signup(request):
+	return render(request,'task/signup.html') 	

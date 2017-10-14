@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<h1>Signup</h1><br>
+<body>
+  First name<input type="text" id="first_name" name="first_name"><br>
+  Last name<input type="text" id="last_name" name="last_name"><br>
+  Email<input type="email" id="email" name="email"><br>
+  Phone number<input type="text" id="phone_number" name="phone_number"><br>
+  Gender:<br>
+  		<input type="radio" name="Gender" value="M" checked>Male <br>
+  		<input type="radio" name="Gender" value="F">Female <br>
+  		<input type="radio" name="Gender" value="O">Other <br>
+<button type="button" onclick="signup()">Signup</button>
+
+  <script type="text/javascript">
+  function signup(){
+  	gender = $('input[name=Gender]:checked').val();
+  	first_name = $('#first_name').val();
+  	last_name = $('#last_name').val();
+  	email = $('#email').val();
+  	phone_number = $('#phone_number').val();
+
+  	console.log(gender)
+  	 $.ajax({
+          type: "POST",
+          url: "/api/signup/",
+          data: {first_name:first_name,
+          		last_name:last_name,
+          		email:email,
+          		phone_number:phone_number,
+          		gender:gender
+          			},
+          success: function(res){
+          	console.log(res)
+              if (res.status=="success"){
+                  alert(res.messages) 
+              }
+              else{
+                  alert(res.messages);
+              }
+          },
+          error:function(res){
+              alert("error");
+          }
+        });
+
+  }
+  </script>
+  {{ request.GET.error }}
+  <a href="/">Login</a><br>
+</body>
+</html>
