@@ -80,11 +80,14 @@
           			},
           success: function(res){
           	console.log(res)
-              if (res.status=="success"){
-                  alert(res.messages) 
+              if (res.status=="OK"){
+              	localStorage.setItem("token", res.token);
+              	console.log(localStorage.getItem("token"))
+                  window.location = "http://127.0.0.1:8000/home/";
+ 
               }
               else{
-                  alert(res.messages);
+              	 alert(res.message)
               }
           },
           error:function(res){

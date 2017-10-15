@@ -11,7 +11,8 @@ from task.models import UserSession
 
 class MutipleTokenAuthentication(BaseAuthentication):
     def authenticate(self, request):
-        token = request.META.get("HTTP_TOKEN", "")
+        token = request.META.get("HTTP_AUTHORIZATION", "")
+        print "token",token
         if not token:
             msg = ('Invalid token header. No credentials provided.')
             raise exceptions.AuthenticationFailed(msg)

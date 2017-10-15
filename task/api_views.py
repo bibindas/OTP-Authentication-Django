@@ -90,10 +90,12 @@ class Logout(APIView):
     authentication_classes = (MutipleTokenAuthentication,)
 
     def post(self,request):
+        print request.user
         user_session = UserSession.objects.get(token=request.user.token)
         user_session.delete()
         return Response(
-            {'status':'OK'},
+            {'status':'OK',
+            'message':'success'},
             status=status.HTTP_200_OK)            
 
 
@@ -103,6 +105,8 @@ class OtpVerification(APIView):
         email = request.data.get("email")
         phone_number = request.data.get("phone_number")
         otp = request.data.get("otp")
+        print "otp", otp
+        print type_
         if not otp:
             return Response({
                 'status':"failed",
@@ -111,7 +115,9 @@ class OtpVerification(APIView):
         if type_ == 'email':
             try:
                 user_session = UserSession.objects.get(user__email=email,otp=otp)
+                print user_session
                 return Response({'status':'OK',
+                    'message':'success',
                     'token':user_session.token
                     },status=status.HTTP_200_OK)
             except:
@@ -123,10 +129,26 @@ class OtpVerification(APIView):
             try:
                 user_session = UserSession.objects.get(user__phone_number=phone_number,otp=otp)
                 return Response({'status':'OK',
-                    'token':user_session.token
+                    'message':'success'
                     },status=status.HTTP_200_OK)
             except:
                 return Response({
                     'status':'failed',
                     'message':'Invalid OTP'
-                    },status=status.HTTP_400_BAD_REQUEST)        
+                    },status=status.HTTP_400_BAD_REQUEST)    
+
+class Search(APIView):
+    authentication_classes = (MutipleTokenAuthentication,)
+
+    def post(self,request):
+
+        search = request.data.get("search")
+        countrys = Country.objects.filter(name__istartswith=search)
+        country_list = []
+        city_list = []
+        language_list = []
+        for country in countrys:
+            country_list.append({'text':country.name,'value':country.name})       
+        return Response({
+            'status':'OK',
+            'country_list':country_list,},status=status.HTTP_200_OK)

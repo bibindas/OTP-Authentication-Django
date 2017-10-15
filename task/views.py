@@ -13,4 +13,7 @@ def login(request):
 	return render(request,'task/login.html')
 
 def signup(request):
-	return render(request,'task/signup.html') 	
+	return render(request,'task/signup.html')
+
+def home(request):
+	return render(request,'task/home.html')	 	

@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'rest_framework',
 )
 
+
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -86,8 +87,11 @@ DATABASES = DATABASES = {
         'PORT': '',
     }
 }
-
-
+# REST_FRAMEWORK = {
+#     'DEFAULT_AUTHENTICATION_CLASSES': (
+#         'task.auth.MutipleTokenAuthentication',
+#     )
+# }
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
