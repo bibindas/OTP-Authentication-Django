@@ -1,20 +1,61 @@
 <!DOCTYPE html>
 <html>
-<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-
-<h1>Login</h1>
-
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+</head>
+<style>
+	.login-border {
+		border: 1px solid antiquewhite;
+        padding: 20px;
+	}
+	.btn-radius {
+		border-radius: 20px;
+	}
+	.btn:focus {
+       outline: none;
+   }
+</style>
 <body>
- Send OTP to my:<br>
-  <input type="radio" id="typeemail" name="type"  value="email"> Email<br>
-  <input type="email" placeholder="Enter email here" id="email" name="email"><br>
-  <input type="radio" id="typephone" name="type" value="phonenumber"> Phone number<br>
-  <input type="text" placeholder="Enter phone number here" id="phone_number" name="phone_number"><br><br>
-  <input type="text" id="otp" placeholder="Enter the OTP here" name="password"><br>
+<h1 class="text-center">Login</h1>
 
-<input type="button" id="submit" value="Receive OTP" onclick="login()">
+<div class="col-lg-5 col-lg-offset-4 login-border">
+  <div class="form-group text-center">
+  <label for="">Send OTP</label>
+  </div> 
+ 
+  <div class="form-group">
+  	<label for="" class="radio-inline">
+  		<input type="radio" id="typeemail" name="type"  value="email"> Email
+  	</label>
+    <input type="email"  class="form-control" placeholder="Enter email here" id="email" name="email">
+  </div>	
 
-  <script type="text/javascript">
+  <div class="form-group">
+    <label for="" class="radio-inline"> 
+        <input type="radio" id="typephone" name="type" value="phonenumber"> Phone number
+    </label>  
+    <input type="text"  class="form-control" placeholder="Enter phone number here" id="phone_number" name="phone_number">	
+  </div>
+
+ <div class="form-group">
+    <div class="col-sm-12" style="padding-bottom: 32px;">
+        	<input type="text" id="otp" class="form-control col-lg-3" placeholder="Enter the OTP here" name="password">	
+    </div>
+ </div>
+
+<div class="form-group">
+  <input type="button" class="btn btn-success btn-radius" id="submit" value="Receive OTP" onclick="login()">
+  <a href="signup/" class="btn btn-link pull-right">Signup</a><br>
+</div>
+</div>
+
+ <!-- script starts -->
+<script type="text/javascript">
   $(document).ready(function () {
     $("#otp").hide();
     $("#email").hide();
@@ -97,6 +138,5 @@
 
   }
   </script>
-  <a href="signup/">Signup</a><br>
 </body>
 </html>

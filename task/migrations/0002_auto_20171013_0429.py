@@ -14,8 +14,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Countrylanguage',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('language', models.CharField(max_length=30, db_column='Language')),
+                #('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('language', models.CharField(max_length=30, db_column='Language', primary_key=True)),
                 ('isofficial', models.CharField(max_length=1, db_column='IsOfficial')),
                 ('percentage', models.FloatField(db_column='Percentage')),
                 ('countrycode', models.ForeignKey(to='task.Country', db_column='CountryCode')),

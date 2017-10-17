@@ -1,19 +1,81 @@
 <!DOCTYPE html>
 <html>
+<head>
+	<meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<style>
+    .login-border {
+		border: 1px solid antiquewhite;
+        padding: 20px;
+	}
+	.btn-radius {
+		border-radius: 20px;
+	}
+	.btn:focus {
+       outline: none;
+    }
+</style>
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-<h1>Signup</h1><br>
 <body>
-  First name<input type="text" id="first_name" name="first_name"><br>
-  Last name<input type="text" id="last_name" name="last_name"><br>
-  Email<input type="email" id="email" name="email"><br>
-  Phone number<input type="text" id="phone_number" name="phone_number"><br>
-  Gender:<br>
-  		<input type="radio" name="Gender" value="M" checked>Male <br>
-  		<input type="radio" name="Gender" value="F">Female <br>
-  		<input type="radio" name="Gender" value="O">Other <br>
-<button type="button" onclick="signup()">Signup</button>
+<h2 class="text-center">Signup</h2><br>
+<!-- signup form -->
+<div class="col-lg-5 col-lg-offset-4 login-border">
+  <form>
+  	 <div class="form-group">
+    <label for="">First Name</label>
+     <input placeholder="First name" class="form-control" type="text" id="first_name" name="first_name">
+  </div>
+  
+  <div class="form-group">
+  	<label for="">Last Name</label>
+       <input placeholder="Last name" class="form-control" type="text" id="last_name" name="last_name">
+  </div>
+ 
+  <div class="form-group">
+  	<label for="" >Email</label>
+       <input placeholder="Email"  class="form-control" type="email" id="email" name="email">
+  </div> 
 
-  <script type="text/javascript">
+  <div class="form-group">
+  	<label for=""  >Phone Number</label>
+     <input placeholder="Phone number"  class="form-control" type="text" id="phone_number" name="phone_number">
+  </div>
+
+  <div class="form-group">
+  	<label for="">Gender:&nbsp;&nbsp;</label>
+  	 <div class="radio-inline">
+  	<label for="">
+  		<input type="radio" name="Gender" value="M" checked>Male 
+  	</label>
+  </div>
+  
+  <div class="radio-inline">
+  	<label for="">
+  		<input type="radio" name="Gender" value="F">Female
+  	</label>
+  </div>
+  
+  <div class="radio-inline">
+  	<label for="">
+  		<input type="radio" name="Gender" value="O">Other
+  	</label>
+  </div>
+  </div>
+
+  <div class="form-group">
+  	 <button type="button" class="btn btn-success btn-radius" onclick="signup()">Signup</button>
+     <a href="/" class="btn btn-link pull-right">Login</a><br>
+  </div>
+ 
+  </form>
+ 
+</div>
+<!-- end form -->
+<script type="text/javascript">
   function signup(){
   	gender = $('input[name=Gender]:checked').val();
   	first_name = $('#first_name').val();
@@ -46,8 +108,7 @@
         });
 
   }
-  </script>
-  {{ request.GET.error }}
-  <a href="/">Login</a><br>
+</script>
+{{ request.GET.error }}
 </body>
 </html>

@@ -1,18 +1,66 @@
 <!DOCTYPE html>
 <html>
 <head>
- {% load static %}
-<link rel='stylesheet' href="{% static "css/selectize.css" %}">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+  {% load static %}
+  <link rel='stylesheet' href="{% static "css/selectize.css" %}">
 </head>
-<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-
-<h1>Home</h1>
+<style>
+  .login-border {
+    border: 1px solid antiquewhite;
+        padding: 20px;
+  }
+  .btn-radius {
+    border-radius: 20px;
+  }
+  .btn:focus {
+       outline: none;
+   }
+   .selectize-input{
+    width: 58% !important;
+   }
+   .selectize-dropdown-content {
+    width: 108% !important;
+   }
+</style>
 <body>
- 
-  <input type="search" id="search" placeholder="Search" name="search">
-  <button type="button" onclick="search()">Search</button><br>
+<h1 class="text-center">Home</h1>
+<div class="col-lg-5 col-lg-offset-4 login-border">
+   <div class="form-group">
+     <label for="">Search options:</label>
+  </div> 
+  <div class="form-group">
+    <label for="" class="radio-inline">
+        <input type="radio" id="typecity" name="type"  value="city"> City
+    </label>
+  </div>
+  <div class="form-group">
+    <label for="" class="radio-inline">
+    <input type="radio" id="typecountry" name="type"  value="country"> Country
+    </label>
+  </div>
 
-  <a href="#"  id="logout" onClick="logout()">Logout </a>
+  <div class="form-group">
+    <label for="" class="radio-inline">
+      <input type="radio" id="typecountrylanguage" name="type"  value="countrylanguage"> Country language
+    </label>
+  </div>        
+  <div class="form-group">
+  <div class="col-lg-12">
+      <input type="search" id="search" placeholder="Search" name="search" class="col-lg-12">
+  </div>
+  </div>
+  <div class="form-group">
+     <button type="button" class="btn btn-success btn-radius" onclick="search()">Search</button><br>
+      <a href="#"  id="logout" onClick="logout()">Logout </a>
+  </div>    
+</div>  
 <script src="{% static 'js/selectize.js' %}"></script>
 
 <script type="text/javascript">
@@ -50,26 +98,33 @@
         });
   };
 
+
+
 $('#search').selectize({
-load: function (query, callback) {
-if (!query.length) return callback();
-$.ajax({
-url: '/api/search/',
-data:{search:query},
+  maxItems: 1,
+  load: function (query, callback) {
+    type_ = $('input[name=type]:checked').val();
+    if (!query.length) return callback();
+      $.ajax({
+        url: '/api/search/',
+        data:{search:query,type_:type_},
+        type: 'POST',
+        headers: { Authorization: localStorage.getItem("token") },
+        error: function () {
+          callback();
+        },
+        success: function (res) {
+          console.log(res.search_list)
+          callback(res.search_list.slice(0, 10));
+        }
+      });
+  },
+    render: {
+        option: function (item, escape) {
+        return '<div><span style="font-size:14px;margin-left:10%;">' + escape(item.value) + '</span></div>';
+      }
+    }
 
-type: 'POST',
-headers: { Authorization: localStorage.getItem("token") },
-
-
-error: function () {
-callback();
-},
-success: function (res) {
-console.log(res.country_list)
-callback(res.country_list.slice(0, 10));
-}
-});
-}
 });
 </script>
 

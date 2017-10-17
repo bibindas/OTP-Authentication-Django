@@ -141,14 +141,48 @@ class Search(APIView):
     authentication_classes = (MutipleTokenAuthentication,)
 
     def post(self,request):
-
+        type_ = request.data.get("type_")
         search = request.data.get("search")
-        countrys = Country.objects.filter(name__istartswith=search)
-        country_list = []
-        city_list = []
-        language_list = []
-        for country in countrys:
-            country_list.append({'text':country.name,'value':country.name})       
+        search_list = []
+        if type_ == "country":
+            countrys = Country.objects.filter(name__istartswith=search)
+            for country in countrys:
+                search_list.append({'text':country.name,'value':country.name})
+
+        if type_ == "city":
+            citys = City.objects.filter(name__istartswith=search)
+            for city in citys:
+                search_list.append({'text':city.name,'value':city.name})
+        if type_ == "countrylanguage":
+            languages = Countrylanguage.objects.filter(language__istartswith=search)
+            for language in languages:
+                search_list.append({'text':language.language,'value':language.language})
         return Response({
             'status':'OK',
-            'country_list':country_list,},status=status.HTTP_200_OK)
+            'search_list':search_list,},status=status.HTTP_200_OK)
+
+
+class Details(APIView):
+    authentication_classes = (MutipleTokenAuthentication,)
+
+    def post(self,request):
+        type_ = request.data.get("type_")
+        search = request.data.get("search")
+        if type_ == "country":
+            country = Country.objects.get(name__istartswith=search)
+            citys = City.objects.filter(countrycode=country.code)
+            countrylanguage = Countrylanguage.objects.filter(countrycode=country.code)
+        if type_ == "city":
+            city = City.objects.get(name__istartswith=search)
+            country = Country.objects.get(code=city.countrycode)
+            countrylanguage = Countrylanguage.objects.filter(countrycode=country.code)
+        if type_ == "countrylanguage":
+            language = Countrylanguage.objects.get(language__istartswith=search)
+            country = Country.objects.get(code=language.countrycode)
+            city = City.objects.filter(countrycode=country.code)
+        return Response({
+            'status':'OK',
+            'language':language,
+            'country':country,
+            'city':city
+            },status=status.HTTP_200_OK)

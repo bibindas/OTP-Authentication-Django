@@ -1507,7 +1507,7 @@
 						// toggle dropdown
 						self.isOpen ? self.close() : self.open();
 					} else if (!defaultPrevented) {
-						self.setActiveItem(null);
+							self.setActiveItem(null);
 					}
 					return false;
 				}
