@@ -8,28 +8,34 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 </head>
-<h1> Search details</h1>
+
+<div class="col-lg-12">
+  <a href="#" class="btn btn-link pull-right" onclick="logout()" style="font-size: 1.5em;" title="Logout">
+    <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
+  </a>
+  <a href="/home" class="btn btn-link pull-right" style="font-size: 1.5em;" title="Home">
+    <span class="glyphicon glyphicon-home"></span>
+  </a>
+</div>
+
+<h2 class="text-center">Search details</h2>
 
 <table class="table">
-  <thead class="thead-inverse" id="detailshead">
+    <thead class="thead-inverse" id="detailshead">
+    </thead>
+    <tbody id="detailsbody">
+    </tbody>
+</table>
 
-  </thead>
-  <tbody id="detailsbody">
-    <tr>
-      <td>{{city.name}}</td>
-      <td><a href="#">{{country.name}}</a></td>
-      <td>{{city.district}}</td>
-      <td>{{city.population}}</td>
-     
-    </tr>
-  </tbody>
 <script type="text/javascript">
  $(document).ready(function () {
    if ((localStorage.getItem("token") == "") || (localStorage.getItem("token") == undefined))  {
       window.location = "http://127.0.0.1:8000";
 
    }
-  else{ 
+
+  else{
+   
     url_string = window.location.href 
     url = new URL(url_string);
     type_ = url.searchParams.get("type");
@@ -78,6 +84,32 @@
 }});
 
 
+ function logout(){
+    
+     $.ajax({
+          type: "POST",
+          url: "/api/logout/",
+          data: {},
+          headers: { Authorization: localStorage.getItem("token") },
+
+          success: function(res){
+            console.log(res)
+              if (res.status=="OK"){
+                  console.log(res)
+                localStorage.setItem("token", "");
+
+                  window.location = "http://127.0.0.1:8000";
+ 
+              }
+              else{
+                alert("Failed")
+              }
+          },
+          error:function(res){
+              alert("Enter valid inputs");
+          }
+        });
+  };
 
 </script>  
 

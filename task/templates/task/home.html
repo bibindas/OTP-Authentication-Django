@@ -21,13 +21,17 @@
   }
   .btn:focus {
        outline: none;
-   }
-   .selectize-input{
+  }
+  .selectize-input{
     width: 58% !important;
-   }
-   .selectize-dropdown-content {
+  }
+  .selectize-dropdown-content {
     width: 108% !important;
-   }
+  }
+  .rm-pad {
+    padding: 0px;
+    margin-left: -12px;
+  }
 </style>
 <body>
 <h1 class="text-center">Home</h1>
@@ -51,14 +55,14 @@
       <input type="radio" id="typecountrylanguage" name="type"  value="countrylanguage"> Country language
     </label>
   </div>        
-  <div class="form-group">
-  <div class="col-lg-12">
+  <div class="form-group" style="margin-bottom: 67px !important;">
+  <div class="col-lg-12 rm-pad">
       <input type="search" id="search" placeholder="Search" name="search" class="col-lg-12">
   </div>
   </div>
   <div class="form-group">
-     <button type="button" class="btn btn-success btn-radius" onclick="search_query()">Search</button><br>
-      <a href="#"  id="logout" onClick="logout()">Logout </a>
+     <button type="button" class="btn btn-success btn-radius" onClick="search_query()">Search</button>
+      <a href="#" class="btn btn-link pull-right" id="logout" onClick="logout()">Logout </a>
   </div>    
 </div>  
 <script src="{% static 'js/selectize.js' %}"></script>
