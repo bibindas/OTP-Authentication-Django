@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+</head>
+<h1> Search details</h1>
+
+<table class="table">
+  <thead class="thead-inverse" id="detailshead">
+
+  </thead>
+  <tbody id="detailsbody">
+    <tr>
+      <td>{{city.name}}</td>
+      <td><a href="#">{{country.name}}</a></td>
+      <td>{{city.district}}</td>
+      <td>{{city.population}}</td>
+     
+    </tr>
+  </tbody>
+<script type="text/javascript">
+ $(document).ready(function () {
+   if ((localStorage.getItem("token") == "") || (localStorage.getItem("token") == undefined))  {
+      window.location = "http://127.0.0.1:8000";
+
+   }
+  else{ 
+    url_string = window.location.href 
+    url = new URL(url_string);
+    type_ = url.searchParams.get("type");
+    search = url.searchParams.get("val");  
+     $.ajax({
+          type: "POST",
+          url: "/api/details/",
+          data: {
+            type_:type_,
+            search:search
+          },
+          headers: { Authorization: localStorage.getItem("token") },
+
+          success: function(res){
+              if (res.status=="OK"){
+                  console.log(res)
+                  res_keys = Object.keys(res.data[0]);
+
+                    head_str = '<tr>'
+                    for(i=0; i<res_keys.length;i++){
+                      head_str = head_str + '<th>' + res_keys[i] +'</th>'
+                    }
+                    head_str = head_str+'</tr>'
+                    $('#detailshead').html(head_str)
+                    body_str = ''
+                    for(i=0;i<res.data.length;i++){
+                      body_str = body_str+'<tr>'
+                      res_values = Object.values(res.data[i]);
+                      for(j=0;j<res_values.length;j++){
+                        body_str = body_str + '<td>' + res_values[j] + '</td>'
+                      }
+
+                      body_str = body_str + '</tr>'
+                      }
+                      $('#detailsbody').html(body_str)
+                  }
+              else{
+                alert("Failed")
+              }
+          },
+          error:function(res){
+            console.log(res)
+              alert("Inalid input");
+          }
+        });
+}});
+
+
+
+</script>  
+
+</table> 
+</html> 

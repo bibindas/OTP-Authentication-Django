@@ -6,7 +6,11 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from task.auth import MutipleTokenAuthentication
-
+from task.serializers import (
+    CountrySerializer,
+    CitySerializer,
+    LanguageSerializer,
+)
 from task.models import (
     AppUser,
     City,
@@ -157,6 +161,7 @@ class Search(APIView):
             languages = Countrylanguage.objects.filter(language__istartswith=search)
             for language in languages:
                 search_list.append({'text':language.language,'value':language.language})
+
         return Response({
             'status':'OK',
             'search_list':search_list,},status=status.HTTP_200_OK)
@@ -164,25 +169,39 @@ class Search(APIView):
 
 class Details(APIView):
     authentication_classes = (MutipleTokenAuthentication,)
-
     def post(self,request):
         type_ = request.data.get("type_")
         search = request.data.get("search")
         if type_ == "country":
-            country = Country.objects.get(name__istartswith=search)
-            citys = City.objects.filter(countrycode=country.code)
-            countrylanguage = Countrylanguage.objects.filter(countrycode=country.code)
+            country = Country.objects.filter(name=search)
+
+            data = CountrySerializer(country,many=True).data
+            
         if type_ == "city":
-            city = City.objects.get(name__istartswith=search)
-            country = Country.objects.get(code=city.countrycode)
-            countrylanguage = Countrylanguage.objects.filter(countrycode=country.code)
+            city = City.objects.filter(name=search)
+            data = CitySerializer(city,many=True).data
+
         if type_ == "countrylanguage":
-            language = Countrylanguage.objects.get(language__istartswith=search)
-            country = Country.objects.get(code=language.countrycode)
-            city = City.objects.filter(countrycode=country.code)
+            countrylanguage = Countrylanguage.objects.filter(language=search)
+            
+            data = LanguageSerializer(countrylanguage,many=True).data
+            
+
         return Response({
             'status':'OK',
-            'language':language,
-            'country':country,
-            'city':city
+            'data':data,
+            },status=status.HTTP_200_OK)
+
+
+class CountryDetails(APIView):
+    authentication_classes = (MutipleTokenAuthentication,)
+
+    def post(self,request):
+        country = request.data.get('country')
+        country_data = Country.objects.get(name=country)
+        country_details = CountrySerializer(country).data
+
+        return Response({
+            'status':'OK',
+            'country_details':country_details
             },status=status.HTTP_200_OK)

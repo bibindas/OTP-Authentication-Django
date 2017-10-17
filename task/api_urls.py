@@ -8,5 +8,7 @@ urlpatterns = format_suffix_patterns([
 	url(r'^verify/$',api_views.OtpVerification.as_view(),name='verify'),
 	url(r'^logout/$',api_views.Logout.as_view(),name='logout'),
 	url(r'^search/$',api_views.Search.as_view(),name='search'),
+	url(r'^details/$',api_views.Details.as_view(),name='details'),
+	url(r'^condetails/$',api_views.CountryDetails.as_view(),name='country_details'),
 
 ])

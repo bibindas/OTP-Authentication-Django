@@ -57,13 +57,14 @@
   </div>
   </div>
   <div class="form-group">
-     <button type="button" class="btn btn-success btn-radius" onclick="search()">Search</button><br>
+     <button type="button" class="btn btn-success btn-radius" onclick="search_query()">Search</button><br>
       <a href="#"  id="logout" onClick="logout()">Logout </a>
   </div>    
 </div>  
 <script src="{% static 'js/selectize.js' %}"></script>
 
 <script type="text/javascript">
+
   $(document).ready(function () {
    if ((localStorage.getItem("token") == "") || (localStorage.getItem("token") == undefined))  {
       window.location = "http://127.0.0.1:8000";
@@ -89,15 +90,47 @@
  
               }
               else{
-                alert("HHHHHHHHHHHHH")
+                alert("Failed")
               }
           },
           error:function(res){
-              alert("errorRRRRRRRR");
+              alert("Enter valid inputs");
           }
         });
   };
 
+  function search_query(){
+    console.log("fffffffffffffff")
+  type_ = $('input[name=type]:checked').val();
+  search = $('#search').val();    
+     $.ajax({
+          type: "POST",
+          url: "/api/details/",
+          data: {
+            type_:type_,
+            search:search
+          },
+          headers: { Authorization: localStorage.getItem("token") },
+
+          success: function(res){
+            console.log(res)
+              if (res.status=="OK"){
+                  console.log(res.country)
+                  console.log(res)
+                  window.location = "http://127.0.0.1:8000/details?type="+type_+"&val="+search;
+
+                
+              }
+              else{
+                alert("Failed")
+              }
+          },
+          error:function(res){
+            console.log(res)
+              alert("Invalid input");
+          }
+        });
+  };
 
 
 $('#search').selectize({
@@ -118,14 +151,10 @@ $('#search').selectize({
           callback(res.search_list.slice(0, 10));
         }
       });
-  },
-    render: {
-        option: function (item, escape) {
-        return '<div><span style="font-size:14px;margin-left:10%;">' + escape(item.value) + '</span></div>';
-      }
-    }
+  }
 
 });
+
 </script>
 
 
